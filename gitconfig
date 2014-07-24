@@ -1,0 +1,42 @@
+[user]
+	name = Stefan Leszkiewicz
+	email = stefanl@dius.com.au
+[core]
+	excludesfile = /Users/stefanl/.gitignore_global
+	fileMode = false
+[gui]
+	recentrepo = /Users/stefanl/Git/timesheet_approval
+[color]
+	ui = true
+
+[alias]
+  st = status
+  stat = status
+	d = difftool
+  ci = commit -v
+  cia = commit -v -a
+  co = checkout
+  cp = cherry-pick
+  l = log
+  ll = log -p
+  lt = log trunk..
+  llt = log -p trunk..
+  lm = log master..
+  llm = log -p master..
+  b = branch
+  amend = commit --amend
+  p = pull
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
+[merge]
+	tool = vimdiff
+[push]
+	default = simple
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
