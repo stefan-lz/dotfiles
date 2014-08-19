@@ -1,0 +1,14 @@
+--ignore-dir=bundle
+--ignore-dir=node_modules
+--ignore-dir=bower_components
+--ignore-dir=bin
+--ignore-dir=public
+--ignore-dir=reports
+--ignore-dir=coverage
+--ignore-dir=components
+--ignore-dir=tmp
+--ignore-dir=.tmp
+--ignore-dir=log
+
+--type-set=conf=.conf
+--type-set=haml=.haml
