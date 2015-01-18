@@ -5,15 +5,20 @@ filetype plugin indent on
 let mapleader=" "
 
 set t_Co=256
-colorscheme jellybeans
-"set gfn=Melno:h15
+"colorscheme pyte
+if has('gui_running')
+  "colorscheme pyte
+  colorscheme jellybeans
+else
+  colorscheme jellybeans
+endif
 
 set nocompatible " Disable vi-compatibility
 
 " yank into the global clipboard
-set clipboard=unnamed
+set clipboard=unnamedplus
 
-set mouse=a
+"set mouse=a
 
 " Setup tabs to 2, and expand with spaces
 set tabstop=2
@@ -22,7 +27,7 @@ set shiftwidth=2
 set expandtab
 set autoindent " always set autoindenting on
 set copyindent " copy the previous indentation on autoindenting
-set scrolloff=10 "keep 10 lines above and below cursor if possible
+set scrolloff=5 "keep 5 lines above and below cursor if possible
 
 " smartcase
 " If you search for something containing uppercase characters, it will do a
@@ -39,14 +44,10 @@ set noswapfile
 " dont save file marks
 set viminfo=f0,'50
 
-"augroup CursorLine
-  "au!
-  "au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
-  "au WinLeave * setlocal nocursorline
-"augroup END
-set cursorline
+"set cursorline "too slow
 set number
-set relativenumber
+"set relativenumber
+"set colorcolumn=100 "too slow
 set listchars=tab:▸\ ,eol:¬
 set incsearch
 set hlsearch
@@ -56,13 +57,20 @@ set hlsearch
 match Error /\s\+\%#\@<!$/
 
 " When searching ignore these files (command-t)
-set wildignore+=*.o,*.obj,.git,tmp/**,bin/**,*.log,vendor/rails/**,node_modules/**,bundle/**,angular/node_modules/**,angular/app/components/**
+set wildignore+=TAG,*.o,*.obj,.git,tmp/**,bin/**,*.log,vendor/rails/**,node_modules/**,bundle/**,angular/node_modules/**,angular/app/components/**
 
 " Save all on lost focus
 " :au FocusLost * :wa
 :au FocusLost * silent! wa
 :au WinLeave * silent! wa
 set autowrite
+
+" Persistent undo
+set undofile
+set undodir=$HOME/.vim/undo
+
+set undolevels=1000
+set undoreload=10000
 
 " disable auto commenting, its annoying
 :au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
@@ -77,14 +85,14 @@ nnoremap <F8> "=strftime("%b %e %H:%M:%S")<CR>P
 inoremap <F8> <C-R>=strftime("%b %e %H:%M:%S")<CR>
 
 " run ctags
-nnoremap <Leader>tag :!ctags -e -R lib app spec public config<CR>
+nnoremap <Leader>tag :!ctags -e -R .<CR>
 
 " copy filename
-nnoremap <Leader>cf :let @*=expand("%")<CR>
+nnoremap <Leader>cf :let @+=expand("%")<CR>
 " copy path
-nnoremap <Leader>cp :let @*=expand("%:p")<CR>
+nnoremap <Leader>cp :let @+=expand("%:p")<CR>
 " copy path & line number
-nmap <leader>cv :let @*=expand("%:p") . ':' . line(".")<CR>
+nmap <leader>cv :let @+=expand("%:p") . ':' . line(".")<CR>
 
 " vim-rspec
 map <Leader>rf :call RunCurrentSpecFile()<CR>
@@ -97,6 +105,9 @@ let g:rspec_command = "Dispatch rspec {spec}"
 " vim-dash
 "nmap <leader>d <Plug>DashSearch
 "nmap <leader>d <Plug>DashGlobalSearch
+
+" Don't auto show vim-reek
+let g:reek_always_show = 0
 
 " google
 " vim-g
@@ -113,10 +124,12 @@ au BufNewFile,BufRead *.html.erb setlocal ft=html.eruby
 au BufNewFile,BufRead *.scss setlocal ft=css
 au BufNewFile,BufRead Jakefile setlocal ft=javascript
 au BufNewFile,BufRead *.mc setlocal ft=maxima
+au BufNewFile,BufRead *.gradle setlocal ft=groovy
 
 nnoremap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>f :NERDTreeFind<CR>
 nnoremap <Leader>s :SyntasticToggle<CR>
+nnoremap <Leader>' :TagbarToggle<CR>
 nnoremap <F5> :setlocal spell! spelllang=en_us<CR>
 " nnoremap <Leader>j :BufExplorer<CR>
 
@@ -138,7 +151,7 @@ let g:UltiSnipsJumpBackwardTrigger="<c-h>"
 vmap <Leader>a <Plug>(EasyAlign)
 
 " use ; instead of :
-map ; :
+" map ; :
 
 " use q instead of :q
 nmap q :q<CR>
@@ -164,20 +177,23 @@ nmap <C-l> :wincmd l<CR>
 
 " emacs bindings
 " normal mode, visual mode & insert mode
-map <C-a> ^
-map <C-e> $
-map <C-b> <Left>
-map <C-f> <Right>
-map <C-p> <Up>
-map <C-n> <Down>
+"nmap <C-a> ^
+"nmap <C-e> $
+"nmap <C-b> <Left>
+"nmap <C-f> <Right>
+"nmap <C-p> <Up>
+"nmap <C-n> <Down>
 
 " other emacs bindings in insert mode
-imap <C-e> <Esc>A
-imap <C-a> <Esc>I
-" map <C-k> C "this is go to window above
-imap <C-k> <Esc>C
-imap <C-d> <Esc><Right>xi
-imap <C-o> <Esc>o
+"imap <C-e> <Esc>A
+"imap <C-a> <Esc>I
+"imap <C-b> <Left>
+"imap <C-f> <Right>
+"imap <C-p> <Up>
+"imap <C-n> <Down>
+"imap <C-k> <Esc>C
+"imap <C-d> <Esc><Right>xi
+"imap <C-o> <Esc>o
 
 " command-line mode
 " plugin: vim-emacscommandline takes care of this for me
@@ -188,6 +204,7 @@ imap <C-o> <Esc>o
 "cmap <C-n> <Down>
 "cmap <C-p> <Up>
 
+" to extreme
 "nmap 2 @
 "nmap 3 #
 "nmap 4 $
@@ -198,31 +215,25 @@ imap <C-o> <Esc>o
 "nmap 9 (
 "nmap 0 )
 
-"let g:Powerline_symbols = 'fancy'
-"set laststatus=2 " Always show the statusline
 set encoding=utf-8 " Necessary to show Unicode glyphs
-
-
-"vim-textobj-rubyblock dependency
-"runtime macros/matchit.vim
 
 " ycm stuff
 let g:ycm_confirm_extra_conf = 0
 
 " Syntastic stuff
-let g:syntastic_mode_map = { 'mode': 'active',
-                           \ 'active_filetypes': [],
-                           \ 'passive_filetypes': ['html'] }
-let g:syntastic_check_on_open=1
-let g:syntastic_enable_signs=1
-let g:syntastic_error_symbol='✗'
-let g:syntastic_warning_symbol='⚠'
+"let g:syntastic_mode_map = { 'mode': 'active',
+                           "\ 'active_filetypes': [],
+                           "\ 'passive_filetypes': ['html'] }
+let g:syntastic_check_on_open = 1
+let g:syntastic_enable_signs = 1
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_enable_balloons = 1
 let g:syntastic_enable_highlighting = 1
 let g:syntastic_quiet_messages = {'level': 'warnings'}
 let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
 " let g:syntastic_rb_checkers = ['ruby']
-
+"let g:syntastic_html_tidy_exec = '/usr/bin/tidy'
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
