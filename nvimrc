@@ -20,6 +20,9 @@ Plug 'junegunn/vim-easy-align'
 "tree view
 Plug 'scrooloose/nerdtree'
 
+"tab rename
+Plug 'gcmt/taboo.vim'
+
 "distraction free
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
@@ -69,6 +72,7 @@ set undofile
 set autoread
 set autowriteall "auto write on buffer change
 set clipboard=unnamed
+set foldmethod=syntax
 au FocusLost * silent! wa "auto write on lost focus
 "au BufWrite * :Autoformat "auto format on save
 
