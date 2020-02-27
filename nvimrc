@@ -53,6 +53,8 @@ Plug 'jparise/vim-graphql'
 Plug 'moll/vim-node'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
+Plug 'plasticboy/vim-markdown'
+
 call plug#end()
 
 let mapleader="\<SPACE>"
@@ -122,6 +124,18 @@ nnoremap <Leader>ct :!ctags -R .<CR>
 nnoremap <Leader>fo :Goyo 140<CR>
 nnoremap <Leader>, :e /Users/stefanl/.config/nvim/init.vim<CR>
 nnoremap <Leader>. :source /Users/stefanl/.config/nvim/init.vim<CR>
+
+"tabs
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
+noremap <leader>0 :tablast<cr>
 
 let g:ale_linters = {
 \   'javascript': ['eslint'],
