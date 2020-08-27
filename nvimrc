@@ -53,11 +53,12 @@ Plug 'jparise/vim-graphql'
 Plug 'moll/vim-node'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
-Plug 'plasticboy/vim-markdown'
+"Plug 'plasticboy/vim-markdown' "slow
 
 call plug#end()
 
 let mapleader="\<SPACE>"
+set timeoutlen=500
 let base16colorspace=256  " Access colors present in 256 colorspace
 
 "colorscheme base16-irblack
@@ -74,7 +75,8 @@ set undofile
 set autoread
 set autowriteall "auto write on buffer change
 set clipboard=unnamed
-set foldmethod=syntax
+" set foldmethod=syntax "folding bigger files is way too slow
+" set foldlevelstart=99 "folding bigger files is way too slow
 au FocusLost * silent! wa "auto write on lost focus
 "au BufWrite * :Autoformat "auto format on save
 
@@ -101,10 +103,11 @@ vnoremap <c-b> h
 xmap <Leader>a <Plug>(EasyAlign)
 nmap <leader>a <Plug>(EasyAlign)
 "nnoremap <leader>af :Autoformat<cr>
-nnoremap <leader>p :Files<cr>
-nnoremap <leader>t :Tags<cr>
-nnoremap <leader>b :Buffers<cr>
-nnoremap <leader>; :History:<cr>
+nnoremap <leader>p :Files<CR>
+nnoremap <Leader>o :GFiles<CR>
+nnoremap <leader>t :Tags<CR>
+nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>; :History:<CR>
 nnoremap <Leader>f :Rg<Space>
 nnoremap <Leader>q :qa!<CR>
 nnoremap <Leader>x :q<CR>
@@ -114,14 +117,18 @@ nnoremap <Leader>d <Plug>(devdocs-under-cursor)
 nnoremap <Leader>l :nohlsearch<CR> :ALEFix<CR>
 nnoremap <Leader>e :nohlsearch<CR> :ALENextWrap<CR>
 nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <Leader>gg :GFiles?<CR>
 nnoremap <Leader>gr :Gread<CR>
 nnoremap <Leader>gw :Gwrite<CR>
 nnoremap <Leader>gn :GitGutterNextHunk<CR>
-nnoremap <Leader>gb :GFiles?<CR>
+nnoremap <Leader>gu :GitGutterUndoHunk<CR>
 nnoremap <Leader>cp :let @+ = expand("%:p")<CR>
 nnoremap <Leader>cr :let @+ = expand("%")<CR>
 nnoremap <Leader>ct :!ctags -R .<CR>
-nnoremap <Leader>fo :Goyo 140<CR>
+nnoremap <Leader>fo :setlocal foldmethod=syntax<CR>
+nnoremap <Leader>nfo :setlocal nofoldenable<CR>
+nnoremap <Leader>sp :setlocal spell<CR>
+nnoremap <Leader>yo :Goyo 140<CR>
 nnoremap <Leader>, :e /Users/stefanl/.config/nvim/init.vim<CR>
 nnoremap <Leader>. :source /Users/stefanl/.config/nvim/init.vim<CR>
 
@@ -156,8 +163,16 @@ let g:ale_fixers = {
     "\ 'python': ['/usr/local/bin/pyls'],
     "\ }
 
-"command! -bang -nargs=* Rg
-  "\ call fzf#vim#grep("rg --column --line-number --hidden --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
+
+" This will perform an Rg search for whole words only
+command! -bang -nargs=* WRg
+  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case --word-regexp ".shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
+
+" This will perform an Rg search from the project root of the current buffer
+command! -bang -nargs=* PRg
+  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': expand('%:p:h')}, <bang>0)
 
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
