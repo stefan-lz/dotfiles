@@ -10,7 +10,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb' "fugitive github
 Plug 'airblade/vim-gitgutter'
 
-Plug 'scrooloose/nerdcommenter'
+Plug 'preservim/nerdcommenter'
 Plug 'djoshea/vim-autoread' "auto re-load files from disk
 Plug 'junegunn/vim-easy-align'
 "Plug 'godlygeek/tabular'
@@ -54,6 +54,7 @@ Plug 'moll/vim-node'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 "Plug 'plasticboy/vim-markdown' "slow
+Plug 'lifepillar/pgsql.vim'
 
 call plug#end()
 
@@ -71,6 +72,8 @@ set ignorecase
 set smartcase
 set number
 set nowrap
+set virtualedit=all "Keep scroll position
+set nostartofline "Keep scroll position
 set undofile
 set autoread
 set autowriteall "auto write on buffer change
@@ -79,6 +82,11 @@ set clipboard=unnamed
 " set foldlevelstart=99 "folding bigger files is way too slow
 au FocusLost * silent! wa "auto write on lost focus
 "au BufWrite * :Autoformat "auto format on save
+
+" 1 space after commenting out
+let g:NERDSpaceDelims = 1
+let g:NERDDefaultAlign = 'left'
+let g:sql_type_default = 'pgsql'
 
 "let g:autoformat_autoindent = 0
 "let g:autoformat_retab = 0
@@ -104,7 +112,7 @@ xmap <Leader>a <Plug>(EasyAlign)
 nmap <leader>a <Plug>(EasyAlign)
 "nnoremap <leader>af :Autoformat<cr>
 nnoremap <leader>p :Files<CR>
-nnoremap <Leader>o :GFiles<CR>
+nnoremap <Leader>o :Files %:p:h<CR>
 nnoremap <leader>t :Tags<CR>
 nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>; :History:<CR>
@@ -116,16 +124,19 @@ nnoremap <Leader>n :NERDTreeFind<CR>
 nnoremap <Leader>d <Plug>(devdocs-under-cursor)
 nnoremap <Leader>l :nohlsearch<CR> :ALEFix<CR>
 nnoremap <Leader>e :nohlsearch<CR> :ALENextWrap<CR>
-nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <Leader>gs :Git<CR>
+nnoremap <Leader>gp :Git pull<CR>
 nnoremap <Leader>gg :GFiles?<CR>
 nnoremap <Leader>gr :Gread<CR>
 nnoremap <Leader>gw :Gwrite<CR>
+nnoremap <Leader>gb :Git blame<CR>
+nnoremap <Leader>gl :Git log -- %<CR>
 nnoremap <Leader>gn :GitGutterNextHunk<CR>
 nnoremap <Leader>gu :GitGutterUndoHunk<CR>
 nnoremap <Leader>cp :let @+ = expand("%:p")<CR>
 nnoremap <Leader>cr :let @+ = expand("%")<CR>
-nnoremap <Leader>ct :!ctags -R .<CR>
-nnoremap <Leader>fo :setlocal foldmethod=syntax<CR>
+nnoremap <Leader>cf :let @+ = expand("%:t")<CR>
+nnoremap <Leader>sfo :setlocal foldmethod=syntax<CR>
 nnoremap <Leader>nfo :setlocal nofoldenable<CR>
 nnoremap <Leader>sp :setlocal spell<CR>
 nnoremap <Leader>yo :Goyo 140<CR>
@@ -148,12 +159,16 @@ let g:ale_linters = {
 \   'javascript': ['eslint'],
 \   'json': ['prettier'],
 \   'yaml': ['prettier'],
+\   'ruby': ['rubocop'],
 \}
 
 let g:ale_fixers = {
 \   'javascript': ['prettier'],
 \   'json': ['prettier'],
 \   'yaml': ['prettier'],
+\   'graphql': ['prettier'],
+\   'sql': ['pgformatter'],
+\   'ruby': ['rubocop'],
 \}
 
 "let g:LanguageClient_serverCommands = {
@@ -177,3 +192,36 @@ command! -bang -nargs=* PRg
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" current work projects
+nnoremap <Leader>zz :tabnew<CR>
+\ :lcd /Users/stefanl/projects/orchestrated/people-mapper-ui<CR>
+\ :TabooRename ui-app<CR>
+\ :NERDTreeToggle<CR>
+\ :Git<CR>
+\ :tabnew<CR>
+\ :lcd /Users/stefanl/projects/orchestrated/team-directory<CR>
+\ :TabooRename ui-td<CR>
+\ :NERDTreeToggle<CR>
+\ :Git<CR>
+\ :tabnew<CR>
+\ :lcd /Users/stefanl/projects/orchestrated/orchestrated-graphql<CR>
+\ :TabooRename api<CR>
+\ :NERDTreeToggle<CR>
+\ :Git<CR>
+\ :tabnew<CR>
+\ :lcd /Users/stefanl/projects/orchestrated/orchestrated-auth0<CR>
+\ :TabooRename auth0<CR>
+\ :NERDTreeToggle<CR>
+\ :Git<CR>
+\ :tabnew<CR>
+\ :lcd /Users/stefanl/projects/orchestrated/orca-design-system<CR>
+\ :TabooRename design-system<CR>
+\ :NERDTreeToggle<CR>
+\ :Git<CR>
+\ :tabnew<CR>
+\ :lcd /Users/stefanl/projects/orchestrated/orchestrated-graphql/scripts/queries<CR>
+\ :TabooRename queries<CR>
+\ :NERDTreeToggle<CR>
+\ :1gt<CR>
+

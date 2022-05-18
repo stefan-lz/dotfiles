@@ -43,3 +43,4 @@ bin/
 TAGS
 .rvmrc
 .rake_tasks~
+.ignore
