@@ -55,6 +55,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 "Plug 'plasticboy/vim-markdown' "slow
 Plug 'lifepillar/pgsql.vim'
+Plug 'vim-test/vim-test'
 
 call plug#end()
 
@@ -113,7 +114,8 @@ nmap <leader>a <Plug>(EasyAlign)
 "nnoremap <leader>af :Autoformat<cr>
 nnoremap <leader>p :Files<CR>
 nnoremap <Leader>o :Files %:p:h<CR>
-nnoremap <leader>t :Tags<CR>
+" nnoremap <leader>t :Tags<CR>
+nnoremap <leader>t :TestNearest<CR>
 nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>; :History:<CR>
 nnoremap <Leader>f :Rg<Space>
@@ -136,8 +138,9 @@ nnoremap <Leader>gu :GitGutterUndoHunk<CR>
 nnoremap <Leader>cp :let @+ = expand("%:p")<CR>
 nnoremap <Leader>cr :let @+ = expand("%")<CR>
 nnoremap <Leader>cf :let @+ = expand("%:t")<CR>
-nnoremap <Leader>sfo :setlocal foldmethod=syntax<CR>
-nnoremap <Leader>nfo :setlocal nofoldenable<CR>
+nnoremap <Leader>sfs :setlocal foldmethod=syntax<CR>
+nnoremap <Leader>sfi :setlocal foldmethod=indent<CR>
+nnoremap <Leader>nf :setlocal nofoldenable<CR>
 nnoremap <Leader>sp :setlocal spell<CR>
 nnoremap <Leader>yo :Goyo 140<CR>
 nnoremap <Leader>, :e /Users/stefanl/.config/nvim/init.vim<CR>
@@ -178,12 +181,11 @@ let g:ale_fixers = {
     "\ 'python': ['/usr/local/bin/pyls'],
     "\ }
 
+let test#strategy = "neovim"
+" let g:test#neovim#start_normal = 1
+
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
-
-" This will perform an Rg search for whole words only
-command! -bang -nargs=* WRg
-  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case --word-regexp ".shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
 
 " This will perform an Rg search from the project root of the current buffer
 command! -bang -nargs=* PRg
@@ -193,35 +195,9 @@ imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-" current work projects
-nnoremap <Leader>zz :tabnew<CR>
-\ :lcd /Users/stefanl/projects/orchestrated/people-mapper-ui<CR>
-\ :TabooRename ui-app<CR>
-\ :NERDTreeToggle<CR>
-\ :Git<CR>
-\ :tabnew<CR>
-\ :lcd /Users/stefanl/projects/orchestrated/team-directory<CR>
-\ :TabooRename ui-td<CR>
-\ :NERDTreeToggle<CR>
-\ :Git<CR>
-\ :tabnew<CR>
-\ :lcd /Users/stefanl/projects/orchestrated/orchestrated-graphql<CR>
-\ :TabooRename api<CR>
-\ :NERDTreeToggle<CR>
-\ :Git<CR>
-\ :tabnew<CR>
-\ :lcd /Users/stefanl/projects/orchestrated/orchestrated-auth0<CR>
-\ :TabooRename auth0<CR>
-\ :NERDTreeToggle<CR>
-\ :Git<CR>
-\ :tabnew<CR>
-\ :lcd /Users/stefanl/projects/orchestrated/orca-design-system<CR>
-\ :TabooRename design-system<CR>
-\ :NERDTreeToggle<CR>
-\ :Git<CR>
-\ :tabnew<CR>
-\ :lcd /Users/stefanl/projects/orchestrated/orchestrated-graphql/scripts/queries<CR>
-\ :TabooRename queries<CR>
-\ :NERDTreeToggle<CR>
-\ :1gt<CR>
+let load_project = trim(execute('pwd')) . '/load.vim'
+if !empty(glob(load_project))
+  " echo 'source ' . load_project
+  exec 'source ' . load_project
+endif
 
